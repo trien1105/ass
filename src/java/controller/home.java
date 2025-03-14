@@ -46,7 +46,7 @@ public class home extends HttpServlet {
             Integer roleObj = (Integer) session.getAttribute("role"); // Lấy từ session
             role = (roleObj != null) ? roleObj : 0;
         } catch (Exception e) {
-        } 
+        }  
         if(action==null||action.equals("")){
              String mess = request.getParameter("mess");
             if(role==0){

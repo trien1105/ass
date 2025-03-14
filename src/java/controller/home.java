@@ -102,7 +102,7 @@ public class home extends HttpServlet {
             request.setAttribute("mess", mess);
             request.getRequestDispatcher("home.jsp").forward(request, response);
             }
-            //tạo nhân viên 
+            //tạo nhân viên chỗ này
             
         }else if("createnhanvien".equals(action)&&role==1){
             request.getRequestDispatcher("createnhanvien.jsp").forward(request, response);

@@ -78,7 +78,6 @@ public class home extends HttpServlet {
                     thongbao2="Thu nhập hôm nay là: "+money.get(0).getTongtien()+" VND Thu nhập hôm qua là: "+money.get(1).getTongtien()+" VND";
                     
                 }
-                trienn1
 
             
             request.setAttribute("ma", acc.getManguoidung());

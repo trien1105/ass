@@ -51,6 +51,7 @@ public class home extends HttpServlet {
              String mess = request.getParameter("mess");
             if(role==0){
              response.sendRedirect("login");
+             //trang chính admin
             }else if(role==1){
                 DonHangDAO hd = new DonHangDAO();
                 List<Donhangdto> money = new ArrayList<>();
@@ -90,14 +91,16 @@ public class home extends HttpServlet {
             request.setAttribute("thongbao2", thongbao2);
             request.setAttribute("mess", mess);
             request.getRequestDispatcher("admin.jsp").forward(request, response);
+            //trang nhan vien
             }else if(role==2){
             request.setAttribute("mess", mess);
             request.getRequestDispatcher("nhanvien.jsp").forward(request, response);
+            //trang nguoi dung
             }else if(role==3){
             mathangDAO mh = new mathangDAO();
             List<mathang> spbanchay= new ArrayList<>();
             spbanchay = mh.spbanchay();
-            
+            request.setAttribute("idkh", acc.getManguoidung());
             request.setAttribute("spbanchay", spbanchay);
             request.setAttribute("mess", mess);
             request.getRequestDispatcher("home.jsp").forward(request, response);
@@ -120,16 +123,33 @@ public class home extends HttpServlet {
              request.getRequestDispatcher("admin.jsp").forward(request, response);
         }else if("home".equals(action)){
             response.sendRedirect("home");
+            //xóa
         }else if("delete".equals(action)){
             int idp= Integer.parseInt(request.getParameter("id"));
            out.print("xoa me may di");
+           //edit
         }else if("edit".equals(action)){
             int idp= Integer.parseInt(request.getParameter("id"));
            out.print("xoa me may di");
+           //thong tin nguoi dung
         }else if("information".equals(action)){
             
            out.println(acc.getEmail());
+           //muahang
+        }else if("payproducts".equals(action)&&role==3){
+            mathangDAO d = new mathangDAO();
+            List<mathang> products = new ArrayList<>();
+            try {
+                products=d.getAllProducts();
+            } catch (Exception ex) {
+               
+            }      
+            request.setAttribute("idkh", acc.getManguoidung());
+             request.setAttribute("products", products);
+             request.getRequestDispatcher("home.jsp").forward(request, response);
            
+             
+             
         }
         
         
@@ -147,9 +167,6 @@ public class home extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
       
-  
-    
-    
       }
   
     @Override

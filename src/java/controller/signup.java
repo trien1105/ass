@@ -79,7 +79,6 @@ public class signup extends HttpServlet {
             }    
         } catch (Exception e) {
         }
-       
     }
 
     

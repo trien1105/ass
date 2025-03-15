@@ -54,34 +54,39 @@ public class mathangDAO extends DBContext {
     public List<Integer> idspbanchay() {
         List<Integer> id = new ArrayList<>();
         try {
-            String sql = "select top 5 MatHang.MaMH , MatHang.TenMH ,sum(ChiTietDonHang.SoLuong) as soluong from MatHang join ChiTietDonHang \n"
-                    + "on MatHang.MaMH=ChiTietDonHang.MaMH\n"
-                    + "group by MatHang.MaMH,MatHang.TenMH\n"
-                    + "order by soluong desc ";
-             PreparedStatement st = connection.prepareStatement(sql);
+            String sql = "SELECT TOP 5 \n"
+                    + "    MatHang.MaMH, \n"
+                    + "    MatHang.TenMH, \n"
+                    + "    SUM(ChiTietDonHang.SoLuong) AS soluong \n"
+                    + "FROM MatHang \n"
+                    + "JOIN ChiTietDonHang ON MatHang.MaMH = ChiTietDonHang.MaMH \n"
+                    + "JOIN DonHang ON ChiTietDonHang.MaDH = DonHang.MaDH \n"
+                    + "WHERE DonHang.NgayMua IS NOT NULL  \n"
+                    + "GROUP BY MatHang.MaMH, MatHang.TenMH \n"
+                    + "ORDER BY soluong DESC;";
+            PreparedStatement st = connection.prepareStatement(sql);
             ResultSet rs = st.executeQuery();
             // Đọc dữ liệu vào list products
             while (rs.next()) {
                 int idp = rs.getInt("MaMH");
                 id.add(idp);
             }
-            
+
         } catch (Exception e) {
 
         }
         return id;
     }
-    
-    
-    public mathang getproduct(int idp){
+
+    public mathang getproduct(int idp) {
         mathang mathang = null;
         try {
             String sql = "select*from MatHang where mamh = ?";
-             PreparedStatement st = connection.prepareStatement(sql);
-             st.setInt(1, idp);
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, idp);
             ResultSet rs = st.executeQuery();
-            if(rs.next()) {
-              int id = rs.getInt("MaMH"); // Tên các trường từ DB
+            if (rs.next()) {
+                int id = rs.getInt("MaMH"); // Tên các trường từ DB
                 String name = rs.getString("TenMH");
                 double price = rs.getDouble("Gia");
                 int quantity = rs.getInt("SoLuongTon");
@@ -92,44 +97,39 @@ public class mathangDAO extends DBContext {
                 String img = rs.getString("img");
                 mathang = new mathang(id, name, price, quantity, date, mota, maloai, mncc, img);
             }
-            
+
         } catch (Exception e) {
         }
-         return mathang;
+        return mathang;
     }
-    
-    public List<mathang> spbanchay(){
+
+    public List<mathang> spbanchay() {
         List<mathang> list = new ArrayList<>();
-        for(int i =0;i<idspbanchay().size();i++){
-           int a =Integer.parseInt( idspbanchay().get(i).toString());
-           mathang product = null;
-           product = getproduct(a);
-           if(product!=null){
-               list.add(product);
-           }
-            
-            
+        for (int i = 0; i < idspbanchay().size(); i++) {
+            int a = Integer.parseInt(idspbanchay().get(i).toString());
+            mathang product = null;
+            product = getproduct(a);
+            if (product != null) {
+                list.add(product);
+            }
+
         }
-                
-          return list;
-                
-        
-        
+
+        return list;
+
     }
 
     public static void main(String[] args) {
         mathangDAO mh = new mathangDAO();
         System.out.println(mh.spbanchay().size());
-        
-        for(int i=0;i < mh.spbanchay().size();i++){
+
+        for (int i = 0; i < mh.spbanchay().size(); i++) {
             System.out.println(mh.spbanchay().get(i).getTenmh());
         }
-        
-        
-        
-        for(int i=0;i < mh.idspbanchay().size();i++){
+
+        for (int i = 0; i < mh.idspbanchay().size(); i++) {
             System.out.println(mh.idspbanchay().get(i));
         }
     }
-    
+
 }

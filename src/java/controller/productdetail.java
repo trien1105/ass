@@ -66,8 +66,6 @@ public class productdetail extends HttpServlet {
         } catch (Exception e) {
             out.print("Không tồn tại");
         }
-         
-         
         try {
             String sub = request.getParameter("sub");
            
@@ -105,6 +103,15 @@ public class productdetail extends HttpServlet {
                     response.sendRedirect("home");
                 }
             }
+            }else if(a!=0&&idp==dh.mamhdatenull(idkh)){
+                
+                boolean check =dh.capNhatSoLuongTon(idp, sl);
+                if(check==true){
+                    session.setAttribute("role", 3);
+                    session.setAttribute("mess", "Đã thêm vào giỏ");
+                    response.sendRedirect("home");
+                }
+                
             }else{
                
                 a=dh.madhdatenull(idkh);
@@ -119,10 +126,7 @@ public class productdetail extends HttpServlet {
                      response.sendRedirect("home");
                 }
             }
-            }
-            
-           
-                
+            }   
             }else if(sub.equals("Mua ngay"))   {
             DonHangDAO  dh = new DonHangDAO();
             boolean ins=dh.taodonhangDate(idkh);

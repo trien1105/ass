@@ -81,6 +81,24 @@ public class DonHangDAO extends DBContext {
         }
         return false;
     }
+    
+    public boolean inserttoday(int makh) {
+
+         String sql = "UPDATE DonHang SET NgayMua = ? WHERE NgayMua IS NULL and MaNV IS Null and MaKH= ?";
+    
+    try {
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setDate(1, Date.valueOf(LocalDate.now())); 
+        ps.setInt(2, makh);
+        int rowsUpdated = ps.executeUpdate();
+        return rowsUpdated > 0;
+
+    } catch (Exception e) {
+        e.printStackTrace(); // In lỗi nếu có
+    }
+    return false;
+    }
+    
 
     public boolean taochitietdonhang(int madh, int mamh, int soluong) {
 
@@ -117,31 +135,77 @@ public class DonHangDAO extends DBContext {
         return id;
     }
 
-   public boolean updategiahaibang() {
-       try {
-           // Cập nhật GiaBan trong bảng ChiTietDonHang
-           String sql1 = "UPDATE ChiTietDonHang "
-                       + "SET GiaBan = SoLuong * (SELECT Gia FROM MatHang WHERE MatHang.MaMH = ChiTietDonHang.MaMH)";
-           
-           PreparedStatement ps1 = connection.prepareStatement(sql1);
-           int count1 = ps1.executeUpdate();
-           
-           // Cập nhật tongtien trong bảng DonHang
-           String sql2 = "UPDATE DonHang "
-                       + "SET tongtien = (SELECT SUM(GiaBan) FROM ChiTietDonHang WHERE ChiTietDonHang.MaDH = DonHang.MaDH)";
-        
-           PreparedStatement ps2 = connection.prepareStatement(sql2);
-        int count2 = ps2.executeUpdate();
-           return count1 > 0 && count2 > 0; // Nếu có ít nhất một bản ghi được cập nhật thì trả về true
-       } catch (Exception e) {
-           e.printStackTrace(); // Hiển thị lỗi để debug
-       }
-       return false;
-   }
-   
-   public int manvnull(int makh){
-       int id =0;
-       try {
+    public int mamhdatenull(int makh) {
+        int id = 0;
+
+        try {
+            String sql = "select top 1 mamh from DonHang where MaNV Is null and NgayMua Is null and makh=?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, makh);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                id = rs.getInt("madh");
+            }
+
+        } catch (Exception e) {
+        }
+        return id;
+    }
+
+    public boolean capNhatSoLuongTon(int maMH, int soLuongMua) {
+        try {
+           //Lấy số lượng tồn kho hiện tại
+            String sqlCheck = "SELECT SoLuongTon FROM MatHang WHERE MaMH = ?";
+            PreparedStatement psCheck = connection.prepareStatement(sqlCheck);
+            psCheck.setInt(1, maMH);
+            ResultSet rs = psCheck.executeQuery();
+
+            if (rs.next()) {
+                int soLuongTonHienTai = rs.getInt("SoLuongTon");
+
+              // Kiểm tra nếu số lượng mua nhỏ hơn số lượng tồn 
+                if (soLuongMua <= soLuongTonHienTai) {
+                    //Nếu hợp lệ thì cập nhật số lượng tồn kho
+                    String sqlUpdate = "UPDATE MatHang SET SoLuongTon = SoLuongTon - ? WHERE MaMH = ?";
+                    PreparedStatement psUpdate = connection.prepareStatement(sqlUpdate);
+                    psUpdate.setInt(1, soLuongMua);
+                    psUpdate.setInt(2, maMH);
+
+                    int rowsUpdated = psUpdate.executeUpdate();
+                    return rowsUpdated > 0;
+                } 
+            }
+        } catch (Exception e) {
+         
+        }
+        return false;
+    }
+
+    public boolean updategiahaibang() {
+        try {
+            // Cập nhật GiaBan trong bảng ChiTietDonHang
+            String sql1 = "UPDATE ChiTietDonHang "
+                    + "SET GiaBan = SoLuong * (SELECT Gia FROM MatHang WHERE MatHang.MaMH = ChiTietDonHang.MaMH)";
+
+            PreparedStatement ps1 = connection.prepareStatement(sql1);
+            int count1 = ps1.executeUpdate();
+
+            // Cập nhật tongtien trong bảng DonHang
+            String sql2 = "UPDATE DonHang "
+                    + "SET tongtien = (SELECT SUM(GiaBan) FROM ChiTietDonHang WHERE ChiTietDonHang.MaDH = DonHang.MaDH)";
+
+            PreparedStatement ps2 = connection.prepareStatement(sql2);
+            int count2 = ps2.executeUpdate();
+            return count1 > 0 && count2 > 0; // Nếu có ít nhất một bản ghi được cập nhật thì trả về true
+        } catch (Exception e) {
+            e.printStackTrace(); // Hiển thị lỗi để debug
+        }
+        return false;
+    }
+
+    public int manvnull(int makh) {
+        int id = 0;
+        try {
             String sql = "select top 1 madh from DonHang where MaNV Is null and NgayMua is not null and MaKH =?";
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, makh);
@@ -152,14 +216,11 @@ public class DonHangDAO extends DBContext {
 
         } catch (Exception e) {
         }
-       
-       
-       return id;
-       
-       
-   }
-   
-   
+
+        return id;
+
+    }
+
     public static void main(String[] args) {
         DonHangDAO dh = new DonHangDAO();
         boolean tf = dh.updategiahaibang();

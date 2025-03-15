@@ -4,6 +4,7 @@
  */
 package dal;
 
+import dto.mathangdhctdto;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -51,32 +52,7 @@ public class mathangDAO extends DBContext {
         return products;
     }
 
-    public List<Integer> idspbanchay() {
-        List<Integer> id = new ArrayList<>();
-        try {
-            String sql = "SELECT TOP 5 \n"
-                    + "    MatHang.MaMH, \n"
-                    + "    MatHang.TenMH, \n"
-                    + "    SUM(ChiTietDonHang.SoLuong) AS soluong \n"
-                    + "FROM MatHang \n"
-                    + "JOIN ChiTietDonHang ON MatHang.MaMH = ChiTietDonHang.MaMH \n"
-                    + "JOIN DonHang ON ChiTietDonHang.MaDH = DonHang.MaDH \n"
-                    + "WHERE DonHang.NgayMua IS NOT NULL  \n"
-                    + "GROUP BY MatHang.MaMH, MatHang.TenMH \n"
-                    + "ORDER BY soluong DESC;";
-            PreparedStatement st = connection.prepareStatement(sql);
-            ResultSet rs = st.executeQuery();
-            // Đọc dữ liệu vào list products
-            while (rs.next()) {
-                int idp = rs.getInt("MaMH");
-                id.add(idp);
-            }
-
-        } catch (Exception e) {
-
-        }
-        return id;
-    }
+ 
 
     public mathang getproduct(int idp) {
         mathang mathang = null;
@@ -104,32 +80,106 @@ public class mathangDAO extends DBContext {
     }
 
     public List<mathang> spbanchay() {
-        List<mathang> list = new ArrayList<>();
-        for (int i = 0; i < idspbanchay().size(); i++) {
-            int a = Integer.parseInt(idspbanchay().get(i).toString());
-            mathang product = null;
-            product = getproduct(a);
-            if (product != null) {
+    List<mathang> list = new ArrayList<>();
+    try {
+        String sql = "SELECT TOP 5 MH.MaMH, MH.TenMH, MH.Gia, SUM(CT.SoLuong) AS SoLuong, MH.HSD, MH.MoTa, MH.MaLoai, MH.MaNCC, MH.img " +
+                     "FROM MatHang MH " +
+                     "JOIN ChiTietDonHang CT ON MH.MaMH = CT.MaMH " +
+                     "GROUP BY MH.MaMH, MH.TenMH, MH.Gia, MH.HSD, MH.MoTa, MH.MaLoai, MH.MaNCC, MH.img " +
+                     "ORDER BY SUM(CT.SoLuong) DESC";   
+        
+        PreparedStatement st = connection.prepareStatement(sql);
+        ResultSet rs = st.executeQuery();
+        
+        while (rs.next()) {
+            int id = rs.getInt("MaMH"); 
+            String name = rs.getString("TenMH");
+            double price = rs.getDouble("Gia");  
+            int quantity = rs.getInt("SoLuong");
+            Date date = rs.getDate("HSD");
+            String mota = rs.getString("MoTa");
+            int maloai = rs.getInt("MaLoai");   
+            int mncc = rs.getInt("MaNCC");     
+            String img = rs.getString("img");
+            
+            mathang product = new mathang(id, name, price, quantity, date, mota, maloai, mncc, img);
+            list.add(product);
+        }
+        
+    } catch (Exception e) {
+      
+    }
+    return list;
+}
+
+
+    public List<mathangdhctdto> spdamua(int idkh) {
+        List<mathangdhctdto> list = new ArrayList<>();
+
+        try {
+            String sql = "SELECT CT.MaMH, MH.TenMH,MH.Gia, SUM(CT.SoLuong) AS SoLuong,MH.HSD,Mh.MoTa,MH.img\n"
+                    + "FROM DonHang DH\n"
+                    + "JOIN ChiTietDonHang CT ON DH.MaDH = CT.MaDH\n"
+                    + "JOIN MatHang MH ON CT.MaMH = MH.MaMH\n"
+                    + "WHERE DH.MaKH = ? and NgayMua is not null\n"
+                    + "GROUP BY CT.MaMH, MH.TenMH,MH.Gia,MH.HSD,Mh.MoTa,MH.img";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, idkh);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("MaMH"); // Tên các trường từ DB
+                String name = rs.getString("TenMH");
+                double price = rs.getDouble("Gia");
+                int quantity = rs.getInt("SoLuong");
+                Date date = rs.getDate("HSD");
+                String mota = rs.getString("MoTa");
+                String img = rs.getString("img");
+                mathangdhctdto product = new mathangdhctdto(id, name, price, quantity, date, mota, img);
                 list.add(product);
             }
 
+        } catch (Exception e) {
         }
 
         return list;
-
     }
 
-    public static void main(String[] args) {
-        mathangDAO mh = new mathangDAO();
-        System.out.println(mh.spbanchay().size());
+    public List<mathang> hangtrongio(int idkh) {
+        List<mathang> list = new ArrayList<>();
+        try {
+            String sql = "SELECT DISTINCT MH.MaMH, MH.TenMH,Mh.Gia,MH.SoLuongTon, MH.HSD, MH.MoTa,MH.MaLoai,MH.MaNCC, MH.img\n"
+                    + "FROM DonHang DH\n"
+                    + "JOIN ChiTietDonHang CT ON DH.MaDH = CT.MaDH\n"
+                    + "JOIN MatHang MH ON CT.MaMH = MH.MaMH\n"
+                    + "WHERE DH.MaKH = ? and dh.MaNV is null and dh.NgayMua is null";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, idkh);
+            ResultSet rs = ps.executeQuery();
 
-        for (int i = 0; i < mh.spbanchay().size(); i++) {
-            System.out.println(mh.spbanchay().get(i).getTenmh());
+            while (rs.next()) {
+                int id = rs.getInt("MaMH"); // Tên các trường từ DB
+                String name = rs.getString("TenMH");
+                double price = rs.getDouble("Gia");
+                int quantity = rs.getInt("SoLuongTon");
+                Date date = rs.getDate("HSD");
+                String mota = rs.getString("MoTa");
+                int maloai = rs.getInt("MaLoai");
+                int mncc = rs.getInt("MaNCC");
+                String img = rs.getString("img");
+                mathang product = new mathang(id, name, price, quantity, date, mota, maloai, mncc, img);
+                list.add(product);
+            }
+
+        } catch (Exception e) {
         }
 
-        for (int i = 0; i < mh.idspbanchay().size(); i++) {
-            System.out.println(mh.idspbanchay().get(i));
+        return list;
         }
-    }
+
+   
+    
+    
+      
 
 }

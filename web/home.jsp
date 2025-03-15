@@ -49,7 +49,7 @@
             <h1> ${thongbao}</h1>
             <h1> ${thongbao2}</h1>
             <h1> ${warning}</h1>
-             ${idkh}
+
         </div>
         <%
             Object obj = request.getAttribute("idkh");
@@ -60,24 +60,24 @@
             }
             session.setAttribute("idkh", idkh);
         %>
-        <%= idkh%>
+
         <%
             session.removeAttribute("warning");
             session.removeAttribute("mess");
         %>
 
-       
 
 
 
-        <c:if test="${param.action != 'information'&& param.action != 'payproducts'}">
+
+        <c:if test="${param.action != 'information'&& param.action != 'payproducts'&& param.action != 'payed'&& param.action != 'order'}">
             <table border="1">
-                <h1>Sản Phần Bán chạy</h1>
+                <h1>Sản Phẩm Bán chạy</h1>
                 <thead>
                     <tr>
                         <th>Tên sản phẩm</th>
                         <th>Giá</th>
-                        <th>Số lượng</th>
+                        <th>Số lượng đã bán</th>
                         <th>HSD</th>
                         <th>Mô tả</th>
                         <th>Hình ảnh</th>
@@ -94,9 +94,9 @@
                             <td>${p.mota}</td>
                             <td><img src="${p.img}" style="width: 200px;height: 150px"/></td>
                             <td>
-                                
-                                
-                                
+
+
+
                                 <a href="productdetail?action=buy&id=${p.mamh}" >
                                     select
                                 </a>
@@ -107,15 +107,16 @@
                 </tbody>
             </table>
         </c:if>
-
+        <!-- full list mat hang  -->
 
         <c:if test="${param.action == 'payproducts'}">
             <table border="1">
+                <h1>Mặt Hàng</h1>
                 <thead>
                     <tr>
                         <th>Tên sản phẩm</th>
                         <th>Giá</th>
-                        <th>Số lượng</th>
+                        <th>Số còn lại trong kho</th>
                         <th>HSD</th>
                         <th>Mô tả</th>
                         <th>Hình ảnh</th>
@@ -132,9 +133,10 @@
                             <td>${p.mota}</td>
                             <td><img src="${p.img}" style="width: 200px;height: 150px"/></td>
                             <td>
-                                
-                                <a href="productdetail?action=buy&id=${p.mamh}">
-                                    select
+
+                                <a style="padding: 10%; background-color: #f57c00  ;width: 100px;text-decoration: none;font-size: 18px; font-weight: bold;color: white"
+                                    href="productdetail?action=buy&id=${p.mamh}">
+                                    Mua
                                 </a>
 
                             </td>
@@ -145,9 +147,75 @@
         </c:if>
 
 
+        <c:if test="${param.action == 'payed'}">
+            <table border="1">
+                <h1>Sản Phẩm đã mua</h1>
+                <thead>
+                    <tr>
+                        <th>Tên sản phẩm</th>
+                        <th>Giá</th>
+                        <th>Số lượng đã mua</th>
+                        <th>HSD</th>
+                        <th>Mô tả</th>
+                        <th>Hình ảnh</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <c:forEach var="p" items="${payed}">
+                        <tr>
+                            <td>${p.name}</td>
+                            <td>${p.gia}</td>
+                            <td>${p.soluong}</td>
+                            <td>${p.hsd}</td>
+                            <td>${p.mota}</td>
+                            <td><img src="${p.img}" style="width: 200px;height: 150px"/></td>
+                            <td>
 
+                                <a style="padding: 10%; background-color: #f57c00 ;width: 100px;text-decoration: none;font-size: 18px; font-weight: bold;color: white"
+                                   href="productdetail?action=buy&id=${p.id}">
+                                    Mua lại
+                                </a>
 
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+        </c:if>
 
+        <c:if test="${param.action =='order'}">
+            <table border="1">
+                <h1>Giỏ Hàng của Bạn</h1>
+                <thead>
+                    <tr>
+                        <th>Tên sản phẩm</th>
+                        <th>Giá</th>
+                        <th>Số lượng</th>
+                        <th>HSD</th>
+                        <th>Mô tả</th>
+                        <th>Hình ảnh</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <c:forEach var="p" items="${gio}">
+                        <tr>
+                            <td>${p.tenmh}</td>
+                            <td>${p.gia}</td>
+                            <td>${p.soluongton}</td>
+                            <td>${p.hsd}</td>
+                            <td>${p.mota}</td>
+                            <td><img src="${p.img}" style="width: 200px;height: 150px"/></td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+           
+            <div style="display: flex ;justify-content: center">
+                <a style="padding: 1%; background-color: #14bcd4 ;width: 100px;text-decoration: none;font-size: 18px; font-weight: bold;color: white"
+                    href="home?action=pay"> Thanh toán</a>
+            </div>            
+        </c:if>
 
 
     </body>

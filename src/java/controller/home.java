@@ -8,6 +8,7 @@ import dal.DonHangDAO;
 import dal.mathangDAO;
 import dal.userDAO;
 import dto.Donhangdto;
+import dto.mathangdhctdto;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -124,11 +125,11 @@ public class home extends HttpServlet {
         }else if("home".equals(action)){
             response.sendRedirect("home");
             //xóa
-        }else if("delete".equals(action)){
+        }else if("delete".equals(action)&&role==1){
             int idp= Integer.parseInt(request.getParameter("id"));
            out.print("xoa me may di");
            //edit
-        }else if("edit".equals(action)){
+        }else if("edit".equals(action)&&role==1){
             int idp= Integer.parseInt(request.getParameter("id"));
            out.print("xoa me may di");
            //thong tin nguoi dung
@@ -146,16 +147,47 @@ public class home extends HttpServlet {
             }      
             request.setAttribute("idkh", acc.getManguoidung());
              request.setAttribute("products", products);
-             request.getRequestDispatcher("home.jsp").forward(request, response);
-           
-             
-             
+             request.getRequestDispatcher("home.jsp").forward(request, response);    
+        }else if("payed".equals(action)&&role==3){
+            mathangDAO d = new mathangDAO();
+            List<mathangdhctdto> products = new ArrayList<>();
+            try {
+                products=d.spdamua(acc.getManguoidung());
+            } catch (Exception ex) {
+               
+            }      
+            request.setAttribute("idkh", acc.getManguoidung());
+             request.setAttribute("payed", products);
+             request.getRequestDispatcher("home.jsp").forward(request, response);  
+        }else if("order".equals(action)&&role==3){
+            mathangDAO d = new mathangDAO();
+            List<mathang> products = new ArrayList<>();
+            try {
+                products=d.hangtrongio(acc.getManguoidung());
+            } catch (Exception ex) {
+               
+            }      
+            request.setAttribute("idkh", acc.getManguoidung());
+             request.setAttribute("gio", products);
+             request.getRequestDispatcher("home.jsp").forward(request, response); 
+            
+        }else if("pay".equals(action)&&role==3){
+            mathangDAO data = new mathangDAO();
+            if(data.hangtrongio(acc.getManguoidung()).size()<1){
+            session.setAttribute("mess", "Không có mặt hàng để thanh toán");
+            response.sendRedirect("home");
+            }
+            
+            DonHangDAO mh = new DonHangDAO();
+            boolean check = mh.inserttoday(acc.getManguoidung());
+            if(check==true){
+                session.setAttribute("mess", "đã thanh toán");
+            response.sendRedirect("home");
+            }
         }
         
         
-        
-        
-        else{
+        else if(role!=1){
             session.setAttribute("warning", "Mày không phải admin? Cút!");
             response.sendRedirect("home");    
 

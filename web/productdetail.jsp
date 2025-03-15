@@ -16,7 +16,6 @@
 </head>
 <body>
     
-    ${idkh}
     <form action="productdetail" method="post">
         <div class="cokk">
         <div class="product-image">

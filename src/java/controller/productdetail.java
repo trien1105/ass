@@ -130,14 +130,15 @@ public class productdetail extends HttpServlet {
             }else if(sub.equals("Mua ngay"))   {
             DonHangDAO  dh = new DonHangDAO();
             boolean ins=dh.taodonhangDate(idkh);
-            int a = dh.manvnull(idkh);
+            int a = dh.mamhnvnull(idkh);
             boolean tctmh = dh.taochitietdonhang(a, idp, sl);
             
             if(ins==true&&tctmh==true){
                 boolean tf = dh.updategiahaibang();
                 if(tf==true){
-                    session.setAttribute("role", 3);
-                    session.setAttribute("mess", "Đã mua");
+                    
+                    session.setAttribute("tbmua",dh.totalprice(idkh)+" VND");
+                    session.setAttribute("mess", "Đã mua sản phẩm với giá");
                     response.sendRedirect("home");
                 }
             } 

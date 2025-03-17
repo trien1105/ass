@@ -94,7 +94,7 @@ public class DonHangDAO extends DBContext {
         return rowsUpdated > 0;
 
     } catch (Exception e) {
-        e.printStackTrace(); // In lỗi nếu có
+     
     }
     return false;
     }
@@ -196,17 +196,19 @@ public class DonHangDAO extends DBContext {
 
             PreparedStatement ps2 = connection.prepareStatement(sql2);
             int count2 = ps2.executeUpdate();
-            return count1 > 0 && count2 > 0; // Nếu có ít nhất một bản ghi được cập nhật thì trả về true
+           if(count1>0&&count2>0){
+               return true;
+           }
         } catch (Exception e) {
             e.printStackTrace(); // Hiển thị lỗi để debug
         }
         return false;
     }
 
-    public int manvnull(int makh) {
+    public int mamhnvnull(int makh) {
         int id = 0;
         try {
-            String sql = "select top 1 madh from DonHang where MaNV Is null and NgayMua is not null and MaKH =?";
+            String sql = "select top 1 madh from DonHang where MaNV Is null and NgayMua is not null and MaKH =? order by MaDH desc";
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, makh);
             ResultSet rs = ps.executeQuery();
@@ -220,6 +222,44 @@ public class DonHangDAO extends DBContext {
         return id;
 
     }
+    
+    public double totalprice(int makh){
+        double totalprice=0;
+        try {
+            String sql = "select top 1 tongtien from DonHang where MaNV Is null and NgayMua is not null and MaKH =? order by MaDH desc";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, makh);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                totalprice=rs.getDouble("tongtien");
+            }
+
+        } catch (Exception e) {
+        }
+        
+        return totalprice;
+    }
+    
+    public double totalpricegiohang(int makh){
+        double totalprice=0;
+        try {
+            String sql = "select top 1 tongtien from DonHang where MaNV Is null and NgayMua is null and MaKH =? order by MaDH desc";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, makh);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                totalprice=rs.getDouble("tongtien");
+            }
+
+        } catch (Exception e) {
+        }
+        
+        return totalprice;
+    }
+    
+    
+    
+    
 
     public static void main(String[] args) {
         DonHangDAO dh = new DonHangDAO();

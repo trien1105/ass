@@ -29,11 +29,30 @@
         <div class="nav-center">
             <ul>
                 
-                <li><a href="home?action=products">Hàng Hóa</a></li>
-                <li><a href="home?action=createnhanvien">Thêm nhân viên</a></li>
-                <li><a href="#">Tạo sản phẩm</a></li>
+                <li class="dropdown"><a href="home?action=products">Hàng Hóa</a>
+                 <div class="dropdown-content">
+                <a href="home?action=products">Sản Phẩm</a>
+                <a href="#">Thêm sẩn phẩm</a>
+                <a href="#">Thêm chức năng</a>
+               </div>
+                </li>
+                <li class="dropdown"><a href="#">Nhân viên</a>
+                 <div class="dropdown-content">
+                <a href="home?action=createnhanvien">Thêm nhân viên</a>
+                <a href="#">Nhân Viên</a>
+                <a href="#">Thêm chức năng</a>
+            </div>
+                </li>
+                
             </ul>
         </div>
+         
+         
+        
+         
+         
+         
+         
         <div class="nav-right dropdown">
             <a style="background: none;color:#ffffff; text-decoration: none; font-size: 18px; font-weight: bold;" href="#">Tài khoản</a>
             <div class="dropdown-content">

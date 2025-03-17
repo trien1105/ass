@@ -1,5 +1,5 @@
-﻿
-create database QuanLyBanHang
+﻿create database quanlybanhang
+usequanlybanhang
 
 -- Bảng Admin
 CREATE TABLE Admin (
@@ -81,7 +81,7 @@ CREATE TABLE DonHang (
     MaDH INT PRIMARY KEY IDENTITY(1,1),
     MaNV INT,
     MaKH INT,
-    Ngaymuahang DATE,
+    NgayMua DATE,
     tongtien DECIMAL(12,2),
     FOREIGN KEY (MaNV) REFERENCES NhanVien(MaNV),
     FOREIGN KEY (MaKH) REFERENCES KhachHang(MaKH)
@@ -107,24 +107,10 @@ CREATE TABLE DangNhap (
     manguoidung INT NOT NULL
 );
 
-go
-CREATE TRIGGER trg_UpdateSoLuong 
-ON ChiTietDonHang 
-AFTER INSERT 
-AS
-BEGIN
-    UPDATE MatHang 
-    SET SoLuongTon = MatHang.SoLuongTon - inserted.SoLuong
-    FROM MatHang
-    INNER JOIN inserted ON MatHang.MaMH = inserted.MaMH
-    WHERE MatHang.SoLuongTon >= inserted.SoLuong;
-END;
 
 
 
 
-
-go
 
 -- Bảng Admin
 INSERT INTO Admin (HoTen, Email) VALUES 
@@ -159,29 +145,18 @@ INSERT INTO PhanCong (MaNV, MaCa, NgayLam) VALUES
 
 -- Bảng Loại mặt hàng
 INSERT INTO LoaiMatHang (TenLoai) VALUES 
-('Phone'),
-('Quần áo'),
-('Thực phẩm'),
-('Đồ uống'),
-('Gia vị'),
-('Mỹ phẩm');
-
+(N'Điện tử'), (N'Thời trang'), (N'Gia dụng'), (N'Thực phẩm'), 
+(N'Mỹ phẩm'), (N'Đồ chơi'), (N'Nội thất'), (N'Văn phòng phẩm');
 
 -- Bảng Nhà cung cấp mặt hàng
 INSERT INTO NhaCungCapMatHang (TenNCC, DiaChi, SoDienThoai, Email) VALUES 
-(N'Công ty ABC', N'123 Đường A, TP.HCM', '0911223344', 'abc@example.com'),
-(N'Công ty XYZ', N'456 Đường B, Hà Nội', '0922334455', 'xyz@example.com'),
-(N'Công ty DEF', N'789 Đường C, Đà Nẵng', '0933445566', 'def@example.com'),
-(N'Công ty áddsa', N'10jq Đường B, Hà Nội', '0922334455', 'yz@example.com'),
-(N'Công ty dsasad', N'qka Đường C, Đà Nẵng', '0933445566', 'df@example.com'),
-(N'Công ty GHI', N'321 Đường D, Hải Phòng', '0944556677', 'ghi@example.com');
+(N'Công ty ABC', N'3245 Đường A, TP.HCM', '0911223344', 'abc@example.com'),
+(N'Công ty a', N'234 Đường B, Hà Nội', '234234', 'xyz@example.com'),
+(N'Công ty wert', N'12 Đường C, Đà Nẵng', '52345342', 'def@example.com'),
+(N'Công ty sdf', N'675 Đường B, Hà Nội', '1234123423', 'ytry@example.com'),
+(N'Công ty asd', N'789 Đường C, Đà Nẵng', '1234234', 'fdsf@example.com'),
+(N'Công ty sdfg', N'321 Đường D, Hải Phòng', '0944556677', 'ghi@example.com');
 
--- Bảng Mặt hàng
-INSERT INTO MatHang (TenMH, Gia, SoLuongTon, HSD, MoTa, MaLoai, MaNCC, img) VALUES 
-(N'Laptop Dell', 15000000, 10, '2025-12-31', N'Máy tính xách tay', 1, 1, 'laptop.jpg'),
-(N'Áo sơ mi nam', 300000, 50, NULL, N'Áo sơ mi cotton', 2, 2, 'aosomi.jpg'),
-(N'Nồi cơm điện', 1200000, 20, '2026-01-01', N'Nồi cơm điện 1.8L', 3, 3, 'noicomdien.jpg'),
-(N'Kem dưỡng da', 250000, 30, '2026-06-30', N'Kem dưỡng trắng da', 5, 4, 'kemduong.jpg');
 
 -- Bảng Khách hàng
 INSERT INTO KhachHang (HoTen, SoDienThoai, Email) VALUES 
@@ -190,9 +165,43 @@ INSERT INTO KhachHang (HoTen, SoDienThoai, Email) VALUES
 (N'Lê Hoàng Nam', '0965432109', 'nam@example.com'),
 (N'Phạm Văn Quang', '0954321098', 'quang@example.com'),
 (N'Trịnh Thị Hạnh', '0943210987', 'hanh@example.com');
+-- mh
+INSERT INTO MatHang (TenMH, Gia, SoLuongTon, HSD, MoTa, MaLoai, MaNCC, img) VALUES
+(N'iPhone 14', 25000000, 9999, '2100-12-31', N'luxury phone', 1, 2, 'img/iphone14.jpg'),
+(N'Áo thun nam', 200000, 49997, '2026-06-30', N'Make by cotton', 2, 2, 'img/aothun.jpg'),
+(N'milk', 200000, 0, '2025-12-31', N'chai 1L', 3, 3, 'img/sua.jpg'),
+(N'Bánh mì', 15000, 4989, '2025-12-31', N'Bánh mì sữa ngon', 3, 3, 'img/banhmi.jpg'),
+(N'Mì gói', 50000, 19940, '2026-01-01', N'Mì ăn liền', 3, 3, 'img/migoi.jpg'),
+(N'cooking oil', 45000, 30000, '2026-06-10', N'cooking oil 1L', 3, 4, 'img/dauan.jpg'),
+(N'cocacola', 12000, 5996, '2025-09-30', N'Chai 1.5L', 4, 5, 'img/nuocngot.webp'),
+(N'Nacl', 10000, 99999, '2025-09-30', N'Gói 150g', 4, 3, 'img/muoi.png'),
+(N'iPhone 15 Pro Max', 39000000, 50, '2026-12-31', N'Điện thoại Apple mới nhất', 1, 2, 'img/ip15.webp'),
+(N'Samsung Galaxy Z Fold 5', 45000000, 10, '2026-12-31', N'Điện thoại gập cao cấp Samsung', 1, 2, 'img/szs5.webp'),
+(N'Xiaomi Redmi Note 12', 7000000, 20, '2026-06-30', N'Điện thoại giá rẻ pin trâu', 1, 2, 'img/redmi.jpg'),
+(N'Oppo Reno 8', 9000000, 25, '2026-06-30', N'Điện thoại chụp ảnh đẹp', 1, 2, 'img/reno8.jpg'),
+(N'Áo sơ mi nam', 350000, 49, '2027-06-30', N'Áo sơ mi cao cấp', 2, 6, 'img/aosomi.jpg'),
+(N'Quần jeans nữ', 600000, 30, '2027-06-30', N'Quần jeans phong cách', 2, 6, 'img/jeans.jpg'),
+(N'Áo khoác Adidas', 1500000, 10, '2027-12-30', N'Áo khoác thể thao Adidas', 2, 6, 'img/aokhoac.jpg'),
+(N'Giày Nike Air Force 1', 2500000, 20, '2027-08-15', N'Giày thể thao hot trend', 2, 6, 'img/giaynike.webp'),
+(N'Bánh Oreo', 60000, 100, '2025-10-11', N'Bánh quy vị socola', 3, 3, 'img/oreo.jpg'),
+(N'cô gai hạ lan', 2800, 0, '2024-11-10', N'sữa thanh trùng', 3, 3, 'img/cogaihl.jpg'),
+(N'Snack Poca vị BBQ', 15000, 50, '2025-10-01', N'Snack khoai tây BBQ', 3, 3, 'img/bim.jpg'),
+(N'Hảo Hảo tôm chua cay', 3500, 100, '2025-10-01', N'Mì gói tôm chua cay huyền thoại', 3, 3, 'img/hao.jpg'),
+(N'Coca-Cola lon 330ml', 12000, 245, '2025-08-30', N'Nước giải khát có gas', 4, 5, 'img/cocalon.png'),
+(N'Trà xanh 0 độ', 16000, 300, '2025-09-10', N'Trà xanh giải nhiệt', 4, 5, 'img/kodo.jpg'),
+(N'Cà phê G7 hòa tan', 75000, 100, '2026-10-11', N'Cà phê hòa tan thơm ngon', 4, 6, 'img/g7.jpg'),
+(N'Nước suối Lavie 500ml', 10000, 500, '2025-12-31', N'Nước tinh khiết', 4, 5, 'img/lavie.jpg'),
+(N'Nước mắm Phú Quốc', 75000, 50, '2026-12-31', N'Nước mắm thượng hạng', 5, 6, 'img/nmpk.webp'),
+(N'Muối Tây Ninh', 25000, 100, '2026-12-31', N'Muối ăn Tây Ninh chấm trái cây', 5, 6, 'img/ttn.jpg'),
+(N'Tiêu đen nguyên hạt', 250000, 50, '2026-12-31', N'Tiêu đen nguyên hạt', 5, 6, 'img/hn.jpg'),
+(N'Hạt nêm Knorr 400g', 45000, 100, '2026-12-31', N'Gia vị hạt nêm thơm ngon', 5, 6, 'img/hn.jpg'),
+(N'Son Mac Ruby Woo', 650000, 30, '2027-12-31', N'Son Mac Ruby Woo chính hãng', 6, 2, 'img/sm.jpg'),
+(N'Sữa rửa mặt Cetaphil', 250000, 50, '2026-12-31', N'Sữa rửa mặt dịu nhẹ', 6, 2, 'img/srm.jpg'),
+(N'Kem chống nắng Anessa', 700000, 20, '2027-06-30', N'Kem chống nắng Nhật Bản', 6, 2, 'img/kcn.webp'),
+(N'Dầu gội sunsilk', 180000, 39, '2027-05-05', N'Dầu gội phục hồi tóc hư tổn', 6, 2, 'img/dgs.jpg');
 
 -- Bảng Đơn hàng
-INSERT INTO DonHang (MaNV, MaKH, Ngaymuahang, tongtien) VALUES 
+INSERT INTO DonHang (MaNV, MaKH, NgayMua, tongtien) VALUES 
 (1, 1, '2024-03-10', 15300000),
 (2, 2, '2024-03-11', 300000),
 (3, 3, '2024-03-12', 1200000),
@@ -206,44 +215,27 @@ INSERT INTO ChiTietDonHang (MaDH, MaMH, SoLuong, GiaBan) VALUES
 
 -- Bảng Đăng nhập
 INSERT INTO DangNhap (Email, MatKhau, Role, manguoidung) VALUES 
-('admin1@example.com', 'admin123', 1, 1), ('admin2@example.com', 'admin123', 1, 2),
-('nv1@example.com', 'password1', 2, 1), ('nv2@example.com', 'password2', 2, 2),
-('nv3@example.com', 'password3', 2, 3), ('nv4@example.com', 'password4', 2, 4),
-('nv5@example.com', 'password5', 2, 5), ('khoa@example.com', 'customer1', 3, 1),
-('thanh@example.com', 'customer2', 3, 2), ('nam@example.com', 'customer3', 3, 3),
+('admin', '1', 1, 1), ('admin2@example.com', 'admin123', 1, 2),
+('nv1', '1', 2, 1), ('nv2', '2', 2, 2),
+('nv3e.com', 'password3', 2, 3), ('nv4@example.com', 'password4', 2, 4),
+('nv5@example.com', 'password5', 2, 5), ('kh1', '1', 3, 1),
+('kh2', '1', 3, 2), ('nam@example.com', 'customer3', 3, 3),
 ('quang@example.com', 'customer4', 3, 4), ('hanh@example.com', 'customer5', 3, 5);
 
 
 
-INSERT INTO MatHang (TenMH, Gia, SoLuongTon, HSD, MoTa, MaLoai, MaNCC) VALUES
-
-('iPhone 15 Pro Max', 32000000, 20, '2026-12-31', 'Điện thoại Apple mới nhất', 1, 1),
-('Samsung Galaxy Z Fold 5', 45000000, 10, '2026-12-31', 'Điện thoại gập cao cấp Samsung', 1, 2),
-('Xiaomi Redmi Note 12', 7500000, 30, '2026-06-30', 'Điện thoại giá rẻ pin trâu', 1, 3),
-('Oppo Reno 8', 9000000, 25, '2026-09-30', 'Điện thoại Oppo chụp ảnh đẹp', 1, 4),
-
-('Áo sơ mi nam', 350000, 50, '2027-06-30', 'Áo sơ mi cao cấp', 2, 3),
-('Quần jeans nữ', 600000, 40, '2027-06-30', 'Quần jeans phong cách', 2, 4),
-('Áo khoác Adidas', 1500000, 20, '2027-12-30', 'Áo khoác thể thao Adidas', 2, 5),
-('Giày Nike Air Force 1', 2500000, 15, '2027-08-15', 'Giày thể thao hot trend', 2, 6),
 
 
-('Bánh Oreo', 40000, 100, '2025-11-01', 'Bánh quy vị socola', 3, 5),
-('Sữa tươi TH True Milk', 28000, 200, '2024-11-20', 'Sữa tươi thanh trùng', 3, 6),
-('Snack Poca vị BBQ', 25000, 150, '2025-05-10', 'Snack khoai tây vị BBQ', 3, 1),
-('Mì Hảo Hảo tôm chua cay', 5000, 500, '2025-09-10', 'Mì gói tôm chua cay huyền thoại', 3, 2),
+go
 
-('Coca-Cola lon 330ml', 12000, 300, '2025-09-15', 'Nước giải khát có gas', 4, 3),
-('Trà xanh 0 độ', 10000, 250, '2025-08-30', 'Nước trà xanh giải nhiệt', 4, 4),
-('Cà phê G7 hòa tan', 75000, 180, '2026-07-01', 'Cà phê hòa tan thơm ngon', 4, 5),
-('Nước suối Lavie 500ml', 6000, 350, '2026-05-20', 'Nước khoáng thiên nhiên', 4, 6),
-
-('Nước mắm Phú Quốc', 90000, 60, '2026-08-01', 'Nước mắm truyền thống', 5, 1),
-('Muối Tây Ninh', 25000, 120, '2027-02-01', 'Muối ớt tây ninh chấm trái cây', 5, 2),
-('Tiêu đen nguyên hạt', 80000, 70, '2027-03-15', 'Hạt tiêu đen cay nồng', 5, 3),
-('Hạt nêm Knorr 400g', 45000, 100, '2026-06-25', 'Gia vị hạt nêm từ thịt', 5, 4),
-
-('Son Mac Ruby Woo', 500000, 30, '2027-12-31', 'Son lì màu đỏ quyến rũ', 6, 5),
-('Sữa rửa mặt Cetaphil', 220000, 50, '2027-09-20', 'Sữa rửa mặt cho da nhạy cảm', 6, 6),
-('Kem chống nắng Anessa', 550000, 35, '2027-10-10', 'Kem chống nắng Nhật Bản', 6, 1),
-('Dầu gội TRESemmé', 180000, 40, '2027-05-05', 'Dầu gội phục hồi tóc hư tổn', 6, 2);
+CREATE TRIGGER trg_UpdateSoLuong 
+ON ChiTietDonHang 
+AFTER INSERT 
+AS
+BEGIN
+    UPDATE MatHang 
+    SET SoLuongTon = MatHang.SoLuongTon - inserted.SoLuong
+    FROM MatHang
+    INNER JOIN inserted ON MatHang.MaMH = inserted.MaMH
+    WHERE MatHang.SoLuongTon >= inserted.SoLuong;
+END;

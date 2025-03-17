@@ -161,6 +161,7 @@ public class home extends HttpServlet {
              request.getRequestDispatcher("home.jsp").forward(request, response);  
         }else if("order".equals(action)&&role==3){
             mathangDAO d = new mathangDAO();
+            DonHangDAO dh = new  DonHangDAO();
             List<mathang> products = new ArrayList<>();
             try {
                 products=d.hangtrongio(acc.getManguoidung());
@@ -168,6 +169,7 @@ public class home extends HttpServlet {
                
             }      
             request.setAttribute("idkh", acc.getManguoidung());
+            request.setAttribute("gia", "Số tiền cần thanh toán là :" +dh.totalpricegiohang(acc.getManguoidung())+" VND");
              request.setAttribute("gio", products);
              request.getRequestDispatcher("home.jsp").forward(request, response); 
             
@@ -185,6 +187,8 @@ public class home extends HttpServlet {
             response.sendRedirect("home");
             }
         }
+        
+        
         
         
         else if(role!=1){

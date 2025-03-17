@@ -148,7 +148,7 @@ public class mathangDAO extends DBContext {
     public List<mathang> hangtrongio(int idkh) {
         List<mathang> list = new ArrayList<>();
         try {
-            String sql = "SELECT DISTINCT MH.MaMH, MH.TenMH,Mh.Gia,MH.SoLuongTon, MH.HSD, MH.MoTa,MH.MaLoai,MH.MaNCC, MH.img\n"
+            String sql = "SELECT DISTINCT MH.MaMH, MH.TenMH,Mh.Gia,CT.SoLuong, MH.HSD, MH.MoTa,MH.MaLoai,MH.MaNCC, MH.img\n"
                     + "FROM DonHang DH\n"
                     + "JOIN ChiTietDonHang CT ON DH.MaDH = CT.MaDH\n"
                     + "JOIN MatHang MH ON CT.MaMH = MH.MaMH\n"
@@ -161,7 +161,7 @@ public class mathangDAO extends DBContext {
                 int id = rs.getInt("MaMH"); // Tên các trường từ DB
                 String name = rs.getString("TenMH");
                 double price = rs.getDouble("Gia");
-                int quantity = rs.getInt("SoLuongTon");
+                int quantity = rs.getInt("SoLuong");
                 Date date = rs.getDate("HSD");
                 String mota = rs.getString("MoTa");
                 int maloai = rs.getInt("MaLoai");

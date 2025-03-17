@@ -49,7 +49,7 @@
             <h1> ${thongbao}</h1>
             <h1> ${thongbao2}</h1>
             <h1> ${warning}</h1>
-
+            <h1> ${tbmua}</h1>
         </div>
         <%
             Object obj = request.getAttribute("idkh");
@@ -64,6 +64,8 @@
         <%
             session.removeAttribute("warning");
             session.removeAttribute("mess");
+            session.removeAttribute("tbmua");
+        
         %>
 
 
@@ -71,7 +73,7 @@
 
 
         <c:if test="${param.action != 'information'&& param.action != 'payproducts'&& param.action != 'payed'&& param.action != 'order'}">
-            <table border="1">
+            <table border="1" style="padding: 20px">
                 <h1>Sản Phẩm Bán chạy</h1>
                 <thead>
                     <tr>
@@ -97,8 +99,9 @@
 
 
 
-                                <a href="productdetail?action=buy&id=${p.mamh}" >
-                                    select
+                                <a style="width:150px;padding: 20%; background-color: #f57c00  ;width: 100px;text-decoration: none;font-size: 18px; font-weight: bold;color: white"
+                                    href="productdetail?action=buy&id=${p.mamh}" >
+                                    Mua
                                 </a>
 
                             </td>
@@ -134,7 +137,7 @@
                             <td><img src="${p.img}" style="width: 200px;height: 150px"/></td>
                             <td>
 
-                                <a style="padding: 10%; background-color: #f57c00  ;width: 100px;text-decoration: none;font-size: 18px; font-weight: bold;color: white"
+                                <a style="width:150px ; padding: 15%; background-color: #f57c00  ;width: 100px;text-decoration: none;font-size: 18px; font-weight: bold;color: white"
                                     href="productdetail?action=buy&id=${p.mamh}">
                                     Mua
                                 </a>
@@ -172,7 +175,7 @@
                             <td><img src="${p.img}" style="width: 200px;height: 150px"/></td>
                             <td>
 
-                                <a style="padding: 10%; background-color: #f57c00 ;width: 100px;text-decoration: none;font-size: 18px; font-weight: bold;color: white"
+                                <a style=" width:150px ;padding: 15%; background-color: #f57c00 ;width: 100px;text-decoration: none;font-size: 18px; font-weight: bold;color: white"
                                    href="productdetail?action=buy&id=${p.id}">
                                     Mua lại
                                 </a>
@@ -186,6 +189,7 @@
 
         <c:if test="${param.action =='order'}">
             <table border="1">
+                <h1>${gia}</h1>
                 <h1>Giỏ Hàng của Bạn</h1>
                 <thead>
                     <tr>

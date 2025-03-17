@@ -1,0 +1,51 @@
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 18px;
+    text-align: left;
+    border-radius: 10px;
+}
+
+thead,
+tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+table thead {
+    table-layout: fixed;
+    background-color: #555;
+}
+
+tbody {
+    display: block;
+    max-height: 500px;
+    /* Chiều cao tối đa cho phần nội dung cuộn */
+    overflow-y: auto;
+    overflow-x: hidden;
+    /* Kích hoạt cuộn dọc */
+}
+
+table th,
+table td {
+    /* background-color: #33334d; */
+    color: black;
+    padding: 10px 20px;
+}
+
+table td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+table tr {
+    border-bottom: solid 1px #33334d;
+    height: 40px;
+}
+
+table tr:hover {
+    background-color: gray;
+}

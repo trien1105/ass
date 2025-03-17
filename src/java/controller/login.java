@@ -86,7 +86,7 @@ public class login extends HttpServlet {
                         response.sendRedirect("home");
                         
                     } else {
-                        request.setAttribute("mess", "Wrong Information !");
+                        request.setAttribute("mess", "Thông tin tài khoản hoặc mật khẩu không chính xác !");
                         request.getRequestDispatcher("login.jsp").forward(request, response);
                     }
                 } else {

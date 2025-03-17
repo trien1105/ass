@@ -239,3 +239,16 @@ BEGIN
     INNER JOIN inserted ON MatHang.MaMH = inserted.MaMH
     WHERE MatHang.SoLuongTon >= inserted.SoLuong;
 END;
+
+go
+
+CREATE TRIGGER trg_UpdateSoLuonggiam 
+ON ChiTietDonHang 
+AFTER delete 
+AS
+BEGIN
+    UPDATE MatHang 
+    SET SoLuongTon = MatHang.SoLuongTon + deleted.SoLuong
+    FROM MatHang
+    INNER JOIN inserted ON MatHang.MaMH = deleted.MaMH
+END;

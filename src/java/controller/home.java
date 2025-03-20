@@ -34,7 +34,7 @@ import user.account;
  * 
 =======
  *
->>>>>>> 1e99fcf long
+>>>>>>> 1e99fcf long......
  */
 @WebServlet(name = "home", urlPatterns = {"/home"})
 public class home extends HttpServlet {

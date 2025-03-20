@@ -26,9 +26,7 @@ import models.mathang;
 import user.account;
 
 /**
- *tao vừa sửa ỏ đây
  * @author PC
- * bố mày vừa sửa ở đây
  * 
  */
 @WebServlet(name = "home", urlPatterns = {"/home"})

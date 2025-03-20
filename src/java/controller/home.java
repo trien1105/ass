@@ -87,6 +87,7 @@ public class home extends HttpServlet {
             spbanchay = mh.spbanchay();
             
             request.setAttribute("spbanchay", spbanchay);
+            request.setAttribute("role", role);
             request.setAttribute("ma", acc.getManguoidung());
             request.setAttribute("thongbao", thongbao);
             request.setAttribute("thongbao2", thongbao2);

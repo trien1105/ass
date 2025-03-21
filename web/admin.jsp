@@ -42,6 +42,22 @@
             </div>
                 </li>
                 
+                <li class="dropdown"><a href="#">Bán hàng</a>
+                 <div class="dropdown-content">
+                <a href="#">Thêm chức năng</a>
+                <a href="#">Thêm chức năng</a>
+                <a href="#">Thêm chức năng</a>
+            </div>
+                </li>
+                
+                <li class="dropdown"><a href="#">Đối tác</a>
+                 <div class="dropdown-content">
+                <a href="#">Khách hàng</a>
+                <a href="#">Nhà Cung cấp</a>
+                <a href="#">Thêm chức năng</a>
+            </div>
+                </li>
+                
             </ul>
         </div>
          

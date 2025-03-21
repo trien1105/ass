@@ -57,7 +57,7 @@ CREATE TABLE NhaCungCapMatHang (
 CREATE TABLE MatHang (
     MaMH INT PRIMARY KEY IDENTITY(1,1),
     TenMH NVARCHAR(100) NOT NULL,
-    Gia DECIMAL(12,2) NOT NULL,
+    Gia DECIMAL(38,2) NOT NULL,
     SoLuongTon INT NOT NULL,
     HSD DATE,
     MoTa NVARCHAR(MAX),
@@ -82,7 +82,7 @@ CREATE TABLE DonHang (
     MaNV INT,
     MaKH INT,
     NgayMua DATE,
-    tongtien DECIMAL(12,2),
+    tongtien DECIMAL(38,2),
     FOREIGN KEY (MaNV) REFERENCES NhanVien(MaNV),
     FOREIGN KEY (MaKH) REFERENCES KhachHang(MaKH)
 );
@@ -92,7 +92,7 @@ CREATE TABLE ChiTietDonHang (
     MaDH INT,
     MaMH INT,
     SoLuong INT NOT NULL,
-    GiaBan DECIMAL(12,2) NOT NULL,
+    GiaBan DECIMAL(38,2) NOT NULL,
     PRIMARY KEY (MaDH, MaMH),
     FOREIGN KEY (MaDH) REFERENCES DonHang(MaDH),
     FOREIGN KEY (MaMH) REFERENCES MatHang(MaMH)
@@ -238,4 +238,17 @@ BEGIN
     FROM MatHang
     INNER JOIN inserted ON MatHang.MaMH = inserted.MaMH
     WHERE MatHang.SoLuongTon >= inserted.SoLuong;
+END;
+
+go
+
+CREATE TRIGGER trg_UpdateSoLuonggiam 
+ON ChiTietDonHang 
+AFTER delete 
+AS
+BEGIN
+    UPDATE MatHang 
+    SET SoLuongTon = MatHang.SoLuongTon + deleted.SoLuong
+    FROM MatHang
+    INNER JOIN inserted ON MatHang.MaMH = deleted.MaMH
 END;

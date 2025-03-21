@@ -1,3 +1,5 @@
+
+
 package dal;
 
 import java.sql.Connection;
@@ -12,7 +14,11 @@ import java.util.logging.Logger;
  */
 
 /**
+
+ *
+=======
  *t
+
  * @author FPT University - PRJ30X
  */
 public class DBContext {
@@ -27,8 +33,13 @@ public class DBContext {
         //where StudentDBContext is located in dal package, 
         try {
             String user = "sa";
+
+            String pass = "123";
+            String url = "jdbc:sqlserver://LONG:1433;databaseName=QuanLybanHang";
+=======
             String pass = "trien123";
             String url = "jdbc:sqlserver://DESKTOP-FIJQGP6:1433;databaseName=quanlybanhang";
+
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             connection = DriverManager.getConnection(url, user, pass);
         } catch (ClassNotFoundException | SQLException ex) {
@@ -40,3 +51,4 @@ public class DBContext {
         System.out.println(a.connection);
     }
 }
+

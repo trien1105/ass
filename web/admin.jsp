@@ -38,9 +38,7 @@
                 </li>
                 <li class="dropdown"><a href="#">Nhân viên</a>
                  <div class="dropdown-content">
-                <a href="home?action=createnhanvien">Thêm nhân viên</a>
-                <a href="#">Nhân Viên</a>
-                <a href="#">Thêm chức năng</a>
+                <a href="home?action=quanlynhanvien">Quản lý nhân viên</a>           
             </div>
                 </li>
                 

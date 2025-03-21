@@ -104,32 +104,7 @@ public class home extends HttpServlet {
                 request.setAttribute("mess", mess);
                 request.getRequestDispatcher("nhanvien.jsp").forward(request, response);
                 //trang nguoi dung
-            } else if (role == 3) {
-                mathangDAO mh = new mathangDAO();
-                List<mathang> spbanchay = new ArrayList<>();
-                spbanchay = mh.spbanchay();
-                request.setAttribute("idkh", acc.getManguoidung());
-                request.setAttribute("spbanchay", spbanchay);
-                request.setAttribute("mess", mess);
-                request.getRequestDispatcher("home.jsp").forward(request, response);
-
-            mathangDAO mh = new mathangDAO();
-            List<mathang> spbanchay= new ArrayList<>();
-            spbanchay = mh.spbanchay();
-            
-            request.setAttribute("spbanchay", spbanchay);
-            request.setAttribute("role", role);
-            request.setAttribute("ma", acc.getManguoidung());
-            request.setAttribute("thongbao", thongbao);
-            request.setAttribute("thongbao2", thongbao2);
-            request.setAttribute("mess", mess);
-            request.getRequestDispatcher("admin.jsp").forward(request, response);
-            //trang nhan vien
-            }else if(role==2){
-            request.setAttribute("mess", mess);
-            request.getRequestDispatcher("nhanvien.jsp").forward(request, response);
-            //trang nguoi dung
-            }else if(role==3){
+            } else if(role==3){
             mathangDAO mh = new mathangDAO();
             List<mathang> spbanchay= new ArrayList<>();
             spbanchay = mh.spbanchay();
